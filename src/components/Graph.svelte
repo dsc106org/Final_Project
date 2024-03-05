@@ -4,6 +4,8 @@
 	import * as topojson from 'topojson-client';
 	import { geoPath, geoAlbersUsa } from 'd3-geo';
 	import { draw } from 'svelte/transition';
+        import { geoOrthographic, geoGraticule10} from "d3-geo";
+	import { json } from "d3-fetch";
         let svg;
         let gx;
         let gy;
@@ -148,15 +150,6 @@
 
                 return coords[0][1]
         }
-        
-        
-
-        const marginTop = 50;
-        const marginRight = 50;
-        const marginBottom = 50;
-        const marginLeft = 50;
-        let height = 100 - marginTop - marginBottom
-        let width = 100 - marginLeft - marginRight;
 
         $: years = d3.group(volcanos, d => d.year);
 
@@ -177,7 +170,7 @@
                 return (2.5 * groups.Volcano_explosive_index)
         }
 
-        console.log(points)
+        //console.log(points)
         // debugger;
 
         // Tooltip
@@ -201,7 +194,31 @@
                 // Hide tooltip
                 tooltip.style.visibility = 'hidden';
         }
+
+        //globe section
+
+        // const projection_globe = geoOrthographic().scale(400);
+        // const graticule = geoGraticule10();
+        // const path_globe = geoPath(projection_globe)
+
+        // let outline = ({type: "Sphere"});
+        // let land, borders;
+
+        // json(
+        //         "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json"
+        //         ).then((world) => {
+	// 	// then pull out the land-shapes
+	// 	land = topojson.feature(world, world.objects.land);
+	// 	// and border-shapes
+	// 	borders = topojson.mesh(world, world.objects.countries, (a, b) => a !== b)
+        // });
+
+        // const width = 1200;
+	// const height = 2000;
+
+
 </script>
+
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 <div class="filters">
     <p>Current Filters:</p>
@@ -268,6 +285,24 @@
                         {/each}
                 {/if}
         </svg>
+
+        <!-- <svg
+                {width}
+                {height}
+                viewBox="-120 -250 {width} {height}"
+                style:max-width="100%"
+                style:height="auto"
+                style:display="block"
+                style:margin="auto"
+                style:max-height="100%"
+                >   
+
+                <path d={path_globe(outline)} fill="#12dbff"/>
+                <path d={path_globe(graticule)} stroke="black" fill="none"/>
+                <path d={path_globe(land)} fill="green"/>
+                <path d={path_globe(borders)} fill="none" stroke="black" />
+                <path d={path_globe(outline)} fill="none" stroke="black" />
+        </svg> -->
 </div>
 
 <style>

@@ -2,9 +2,11 @@
     import * as d3 from 'd3';
     import { onMount } from 'svelte';
     import Graph from './Graph.svelte';
+    import Globe from './Globe.svelte';
 
     let volcanos = [];
     let US_volcanos = [];
+    let selected = Graph
 
     onMount(async () => {
         const res = await fetch(
@@ -70,6 +72,33 @@
 
 </script>
 
-<main>
+<!-- <main>
     <Graph {volcanos} {US_volcanos}/>
-</main>
+</main> -->
+
+<svelte:component this={selected} {volcanos} {US_volcanos}/>
+
+<button class="test" on:click={()=> selected = Graph}>
+	US map
+</button>
+<button class="test" on:click={()=> selected = Globe}>
+	World Globe
+</button>
+
+<style>
+    .test{
+        background-color: #04AA6D;
+        border: black;
+        text-align: center;
+        display: inline-block;
+        transition-duration: 0.4s;
+    }
+
+    .test:hover{
+        background-color: white;
+        border :#04AA6D
+        
+    }
+
+
+</style>
