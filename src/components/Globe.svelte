@@ -36,7 +36,7 @@
                         ].map(p => projection_globe([p.long, p.lat]))
                 //$: console.log(coords[0][0])
                 return coords[0][0]
-        }
+    }
 
     function coord_proj_cy(d) {
             let coords = [
@@ -64,7 +64,9 @@
     function showTooltip(d) {
                 d3.select("#tooltip")
                   .style("visibility", "visible")
-                  .html(`<b>${d.name}</b><br>Year: ${d.year}<br>Location: ${d.location}<br>Explosivity: ${d.Volcano_explosive_index}`)
+                  .html(`<b>${d.name}</b><br>Year: ${d.year}<br>Country: ${d.country}<br>Explosivity: ${
+                    d.Volcano_explosive_index === "" ? "Unknown" : d.Volcano_explosive_index
+                }`)
                   .style("left", (event.pageX + 10) + "px")
                   .style("top", (event.pageY + 10) + "px");
                 console.log(d)
@@ -80,36 +82,36 @@
 <div class="globe"> 
 
     <svg
-                {width}
-                {height}
-                viewBox="-120 -250 {width} {height}"
-                style:max-width="100%"
-                style:height="auto"
-                style:display="block"
-                style:margin="auto"
-                style:max-height="100%"
-                >   
+     {width}
+     {height}
+     viewBox="-120 -250 {width} {height}"
+     style:max-width="100%"
+     style:height="auto"
+     style:display="block"
+     style:margin="auto"
+     style:max-height="100%"
+    >   
 
-                <path d={path_globe(outline)} fill="#12dbff"/>
-                <path d={path_globe(graticule)} stroke="black" fill="none"/>
-                <path d={path_globe(land)} fill="green"/>
-                <path d={path_globe(borders)} fill="none" stroke="black" />
-                <path d={path_globe(outline)} fill="none" stroke="black" />
+        <path d={path_globe(outline)} fill="#12dbff"/>
+        <path d={path_globe(graticule)} stroke="black" fill="none"/>
+        <path d={path_globe(land)} fill="green"/>
+        <path d={path_globe(borders)} fill="none" stroke="black" />
+        <path d={path_globe(outline)} fill="none" stroke="black" />
 
-                {#each volcanos as d, i}
-                        <circle
-                            cx={coord_proj_cx(d)}
-                            cy={coord_proj_cy(d)}
-                            r=4
-                            fill={color_checker(d)}
-                            on:mouseover={
-                                    showTooltip(d)
-                            }
-                            on:mouseleave={
-                                    hideTooltip(d)
-                            }
-                        />
-                {/each}
+        {#each volcanos as d, i}
+                <circle
+                    cx={coord_proj_cx(d)}
+                    cy={coord_proj_cy(d)}
+                    r=4
+                    fill={color_checker(d)}
+                    on:mouseover={
+                            showTooltip(d)
+                    }
+                    on:mouseleave={
+                            hideTooltip(d)
+                    }
+                />
+        {/each}
     </svg>
 </div>
 
@@ -117,7 +119,7 @@
 
 <style>
     .globe {
-        animation: fadeIn 5s;
+        animation: fadeIn 2.5s;
     }
 
     @keyframes fadeIn {

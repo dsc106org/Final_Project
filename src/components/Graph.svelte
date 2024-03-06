@@ -174,7 +174,9 @@
         function showTooltip(d) {
                 d3.select("#tooltip")
                   .style("visibility", "visible")
-                  .html(`<b>${d.name}</b><br>Year: ${d.year}<br>Location: ${d.location}<br>Explosivity: ${d.Volcano_explosive_index}`)
+                  .html(`<b>${d.name}</b><br>Year: ${d.year}<br>Location: ${d.location}<br>Explosivity: ${
+                        d.Volcano_explosive_index === "" ? "Unknown" : d.Volcano_explosive_index
+                  }`)
                   .style("left", (event.pageX + 10) + "px")
                   .style("top", (event.pageY + 10) + "px");
                 // console.log(d)
