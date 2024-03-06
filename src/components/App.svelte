@@ -34,6 +34,7 @@
                Volcano_explosive_index: d["Volcano Explosive Index"],
                longitude: d["longitude"],
                latitude: d["latitude"],
+	       damage_caused_rank: d["total"],	
             });
         });
         volcanos = volcanos;
@@ -65,6 +66,7 @@
                Volcano_explosive_index: d["Volcano Explosive Index"],
                longitude: d["longitude"],
                latitude: d["latitude"],
+	       damage_caused_rank: d["total"], 
             });
         });
         US_volcanos = US_volcanos;
