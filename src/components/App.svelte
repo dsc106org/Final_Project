@@ -34,6 +34,7 @@
                Volcano_explosive_index: d["Volcano Explosive Index"],
                longitude: d["longitude"],
                latitude: d["latitude"],
+	       damage_caused_rank: d["total"],	
             });
         });
         volcanos = volcanos;
@@ -65,6 +66,7 @@
                Volcano_explosive_index: d["Volcano Explosive Index"],
                longitude: d["longitude"],
                latitude: d["latitude"],
+	       damage_caused_rank: d["total"], 
             });
         });
         US_volcanos = US_volcanos;
@@ -92,6 +94,7 @@
         text-align: center;
         display: inline-block;
         transition-duration: 0.4s;
+	animation: fade 2s;
     }
 
     .test:hover{
@@ -100,5 +103,9 @@
         
     }
 
+    @keyframes fade {
+        0%,100% { opacity: 0 }
+        50% { opacity: 1 }
+    }
 
 </style>

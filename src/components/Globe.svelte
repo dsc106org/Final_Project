@@ -9,7 +9,7 @@
     import { geoOrthographic, geoGraticule10} from "d3-geo";
 	import { json } from "d3-fetch";
 
-    const projection_globe = geoOrthographic().scale(400);
+    const projection_globe = geoEqualEarth() //.scale(400);
     const graticule = geoGraticule10();
     const path_globe = geoPath(projection_globe)
 
@@ -112,6 +112,18 @@
                 {/each}
     </svg>
 </div>
+
+<style>
+    .globe {
+        animation: fadeIn 5s;
+    }
+
+    @keyframes fadeIn {
+        0% { opacity: 0; }
+        100% { opacity: 1; }
+    }
+</style>
+
 <div id='tooltip'/>
 
 <style>

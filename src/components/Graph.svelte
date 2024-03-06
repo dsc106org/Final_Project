@@ -331,4 +331,14 @@
             visibility: hidden;
 
         }
+
+	.volcanos {
+                animation: fadeIn 1s;;
+                animation-delay: 0s;; 
+        }
+
+        @keyframes fadeIn {
+                0% { opacity: 0; }
+                100% { opacity: 1; }
+        }
 </style>
