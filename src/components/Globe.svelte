@@ -28,7 +28,7 @@
 
 
     const width = 1200;
-	const height = 1000;
+	const height = 600;
 
     function coord_proj_cx(d) {
                 let coords = [  
@@ -84,7 +84,7 @@
     <svg
      {width}
      {height}
-     viewBox="-120 -250 {width} {height}"
+     viewBox="-120 0 {width} {height}"
      style:max-width="100%"
      style:height="auto"
      style:display="block"
