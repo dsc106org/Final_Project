@@ -9,7 +9,7 @@
     import { geoOrthographic, geoGraticule10} from "d3-geo";
 	import { json } from "d3-fetch";
 
-    const projection_globe = geoEqualEarth() //.scale(400);
+    const projection_globe = d3.geoEqualEarth() //.scale(400);
     const graticule = geoGraticule10();
     const path_globe = geoPath(projection_globe)
 
@@ -113,6 +113,8 @@
     </svg>
 </div>
 
+<div id='tooltip'/>
+
 <style>
     .globe {
         animation: fadeIn 5s;
@@ -122,18 +124,13 @@
         0% { opacity: 0; }
         100% { opacity: 1; }
     }
-</style>
-
-<div id='tooltip'/>
-
-<style>
-        #tooltip {
-            background-color: white;
-            padding: 8px;
-            border: 1px solid black;
-            border-radius: 4px;
-            position: absolute;
-            text-align:left;
-            visibility: hidden;
-        }
+    #tooltip {
+        background-color: white;
+        padding: 8px;
+        border: 1px solid black;
+        border-radius: 4px;
+        position: absolute;
+        text-align:left;
+        visibility: hidden;
+    }
 </style>
