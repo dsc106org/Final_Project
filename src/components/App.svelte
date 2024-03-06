@@ -92,15 +92,17 @@
         background-color: #04AA6D;
         border: black;
         text-align: center;
+        font-size:25px;
         display: inline-block;
         transition-duration: 0.4s;
-	animation: fade 2s;
+        margin:5px;
+        padding:15px;
+	    animation: fade 2s;
     }
 
     .test:hover{
         background-color: white;
         border :#04AA6D
-        
     }
 
     @keyframes fade {

@@ -241,7 +241,7 @@
 </div>
 
 <div class="volcanos">  
-        <svg viewBox="-35 10 975 610">
+        <svg viewBox="-260 10 1500 650">
                 <!--    If all the necessary data is loaded in  -->
                 {#if states && counties && mesh}
                         <g fill="white" stroke="black">
