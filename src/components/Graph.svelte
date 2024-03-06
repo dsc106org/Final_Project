@@ -33,7 +33,8 @@
                 location: null // Initialize with no location filter
          };
         let filteredVolcanos; 
-        
+        let closestIndex = -1;
+
         function filterByYear(year) {
                 if (year === '1800s') {
                 filterState.year = 1800;
@@ -102,26 +103,23 @@
         }
 
         function updateFilteredData() {
+                closestIndex = -1;
                 filteredVolcanos = US_volcanos.filter(d => {
                         const yearMatches = filterState.year === 'pre-1800s' ? d.year < 1800 : filterState.year !== null ? d.year >= filterState.year && d.year <= filterState.year + 99 : true; 
                         const locationMatches = filterState.location ? d.location === filterState.location : true;
                         // console.log("Filtering by year:", filterState.year);
                         // console.log("Filtering by location:", filterState.location);
                         // console.log("Number of matches:", filteredVolcanos.length);
-                        
                         return yearMatches && locationMatches;
                 });
+                console.log(filteredVolcanos);
         }
-
-        const points = [
-		{ lat: 60.480, long: -152.750},
-	].map(p => projection([p.long, p.lat]))
 
         onMount(async () => {
 		const us = await fetch('https://cdn.jsdelivr.net/npm/us-atlas@3/counties-albers-10m.json')
 			.then(d => d.json())
                 updateFilteredData();
-		console.log({ us })
+		// console.log({ us })
 		
 		states = topojson.feature(us, us.objects.states).features;
 		// console.log({ features })
@@ -173,27 +171,21 @@
         //console.log(points)
         // debugger;
 
-        // Tooltip
-        let tooltip;
-        let tooltipText = null;
         function showTooltip(d) {
-                console.log(d);
-                // Change text to the current hovered volcano d
-                tooltipText = `Volcano Name: ${d.Volcano_name}\nYear: ${d.year}\nLocation: ${d.location}`;
-                tooltip.textContent = tooltipText;
-                
-                // Move tooltip to hovered volcano d
-                tooltip.style.left = d.cx;
-                tooltip.style.top = d.cy;
-
-                // Show tooltip
-                tooltip.style.visibility = 'visible';
+                d3.select("#tooltip")
+                  .style("visibility", "visible")
+                  .html(`<b>${d.name}</b><br>Year: ${d.year}<br>Location: ${d.location}<br>Explosivity: ${d.Volcano_explosive_index}`)
+                  .style("left", (event.pageX + 10) + "px")
+                  .style("top", (event.pageY + 10) + "px");
+                // console.log(d)
         }
 
-        function hideTooltip() {
-                // Hide tooltip
-                tooltip.style.visibility = 'hidden';
+        function hideTooltip(d) {
+                d3.select("#tooltip")
+                  .style('visibility', 'hidden')
         }
+
+
 
         //globe section
 
@@ -220,11 +212,6 @@
 </script>
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-<div class="filters">
-    <p>Current Filters:</p>
-    <p>Year: {filterState.year === null ? 'All' : filterState.year}</p>
-    <p>Location: {filterState.location ? filterState.location : 'All'}</p>
-</div>
 
 <div class="buttons">
         {#each yearCategories as category}
@@ -261,16 +248,14 @@
                                          on:mouseover={() => selected = feature} 
                                          class="state" 
                                          in:draw={{ delay: i * 50, duration: 500 }} 
-                                         on:animationend={() => updateFilteredData()}
                                          />
                                 {/each}
                         </g>
-                        {console.log(US_volcanos.length)}
-                        {console.log("Begin drawing dots")}
 
                         {#each US_volcanos as d, i}
                                 {#if filteredVolcanos.includes(d)}
                                         <!-- svelte-ignore a11y-interactive-supports-focus -->
+                                        <!-- svelte-ignore a11y-mouse-events-have-key-events -->
                                         <circle
                                          cx={coord_proj_cx(d)}
                                          cy={coord_proj_cy(d)}
@@ -279,7 +264,37 @@
                                          opacity={0.6}
                                          stroke="gray"
                                          role="button"
-                                         aria-label={`Volcano ${d.Volcano_name}, Year: ${d.year}, Location: ${d.location}`}
+                                         aria-label={`Volcano ${d.name}, Year: ${d.year}, Location: ${d.location}`}
+                                         on:mouseover={
+                                                showTooltip(d)
+                                         }
+                                         on:mouseleave={
+                                                hideTooltip(d)
+                                         }
+                                        />
+                                {/if}
+                        {/each}     
+
+                        {#each US_volcanos as d, i}
+                                {#if filteredVolcanos.includes(d)}
+                                        <!-- svelte-ignore a11y-interactive-supports-focus -->
+                                        <!-- svelte-ignore a11y-mouse-events-have-key-events -->
+                                        <circle
+                                         cx={coord_proj_cx(d)}
+                                         cy={coord_proj_cy(d)}
+                                         r={4*(d.Volcano_explosive_index)}
+                                         fill={d.Volcano_explosive_index > 5 ? 'red' : 'orange'}
+                                         opacity={0.6}
+                                         stroke="gray"
+                                         role="button"
+                                         order={`${d.year}`}
+                                         aria-label={`Volcano ${d.name}, Year: ${d.year}, Location: ${d.location}`}
+                                         on:mouseover={
+                                                showTooltip(d)
+                                         }
+                                         on:mouseleave={
+                                                hideTooltip(d)
+                                         }
                                         />
                                 {/if}
                         {/each}
@@ -304,14 +319,16 @@
                 <path d={path_globe(outline)} fill="none" stroke="black" />
         </svg> -->
 </div>
-
+<div id='tooltip'/>
 <style>
-        .tooltip {
+        #tooltip {
             background-color: white;
             padding: 8px;
             border: 1px solid black;
             border-radius: 4px;
-            position: fixed;
-            z-index: 1;
+            position: absolute;
+            text-align:left;
+            visibility: hidden;
+
         }
 </style>

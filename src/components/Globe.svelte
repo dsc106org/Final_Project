@@ -61,6 +61,20 @@
         return "black";
     }
 
+    function showTooltip(d) {
+                d3.select("#tooltip")
+                  .style("visibility", "visible")
+                  .html(`<b>${d.name}</b><br>Year: ${d.year}<br>Location: ${d.location}<br>Explosivity: ${d.Volcano_explosive_index}`)
+                  .style("left", (event.pageX + 10) + "px")
+                  .style("top", (event.pageY + 10) + "px");
+                console.log(d)
+    }
+
+    function hideTooltip(d) {
+            d3.select("#tooltip")
+                .style('visibility', 'hidden')
+    }
+
     //console.log(volcanos);
 </script>
 <div class="globe"> 
@@ -88,7 +102,26 @@
                             cy={coord_proj_cy(d)}
                             r=4
                             fill={color_checker(d)}
+                            on:mouseover={
+                                    showTooltip(d)
+                            }
+                            on:mouseleave={
+                                    hideTooltip(d)
+                            }
                         />
                 {/each}
     </svg>
 </div>
+<div id='tooltip'/>
+
+<style>
+        #tooltip {
+            background-color: white;
+            padding: 8px;
+            border: 1px solid black;
+            border-radius: 4px;
+            position: absolute;
+            text-align:left;
+            visibility: hidden;
+        }
+</style>
