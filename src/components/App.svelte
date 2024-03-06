@@ -94,6 +94,7 @@
         text-align: center;
         display: inline-block;
         transition-duration: 0.4s;
+	animation: fade 2s;
     }
 
     .test:hover{
@@ -102,5 +103,9 @@
         
     }
 
+    @keyframes fade {
+        0%,100% { opacity: 0 }
+        50% { opacity: 1 }
+    }
 
 </style>
