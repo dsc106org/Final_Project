@@ -22,17 +22,13 @@
     <section class="WriteUp">
       <h1 class="title">Is Volcano Activity Increasing over the Years?</h1>
       <p class="para">
-        Volcano eruptions, while volatile, aren't often occuring with high frenquency and such occurences are often balanced out by the ability of predicting when they'll occur along with <br>
-        the positives that they can bring to nature. But with the world facing the increasing and new recording temperatures thanks to climate change, <br />
-        it's been theorized by experts that this may influence increasing occurences in natural phenomenoms, including volcanic eruptions. Therefore it may be that we're expected to start seeing increasing <br />
-        counts of volcanic eruptions with greater explositivity over the upcoming years. This could prove
-        problematic as while <br />
-        volcanos have many benefits, too many consecutive eruptions may endanger
-        nearby civilizations <br />
-        along with greatly reducing potential living space as our population continues
-        to skyrocket. Along <br />
-        with this, multiple volcano eruptions on a large scale could cause a cooling
-        event which would further worsen the global temperature.
+        Volcano eruptions, while volatile, aren't often occuring with high frenquency and such occurences are often balanced out by the ability of <br>
+        predicting when they'll occur along with the positives that they can bring to nature. But with the world facing the increasing and new recording <br>
+        temperatures thanks to climate change, it's been theorized by experts that this may influence increasing occurences in natural phenomenoms, <br>
+        including volcanic eruptions. Therefore, it may be possible that we're expecting to see increasing counts of volcanic eruptions with greater <br>
+        explositivity over the upcoming years. This could prove problematic as while volcanos have many benefits, too many consecutive eruptions may <br>
+        endanger nearby civilizations along with greatly reducing potential living space as our population continues to skyrocket. Along with this, <br>
+        multiple volcano eruptions on a large scale could cause a cooling event which would further worsen the global temperature.
       </p>
       <p class="para">Let's put this theory to the test. To determine the activity extent of volcanos currently, <br>
         we've plotted multiple historically recorded volcano eruptions ranging from some pre 1800s and even <br>
