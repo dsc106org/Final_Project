@@ -3,11 +3,11 @@
 
     import * as d3 from 'd3';
     import { onMount } from 'svelte';
-	import * as topojson from 'topojson-client';
-	import { geoPath, geoAlbersUsa } from 'd3-geo';
-	import { draw } from 'svelte/transition';
+    import * as topojson from 'topojson-client';
+    import { geoPath, geoAlbersUsa } from 'd3-geo';
+    import { draw } from 'svelte/transition';
     import { geoOrthographic, geoGraticule10} from "d3-geo";
-	import { json } from "d3-fetch";
+    import { json } from "d3-fetch";
 
     const projection_globe = d3.geoEqualEarth() //.scale(400);
     const graticule = geoGraticule10();
@@ -19,16 +19,27 @@
     export let volcanos;
     export let US_volcanos;
 
-    json(
-        "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json"
-        ).then((world) => {
-	land = topojson.feature(world, world.objects.land);
-	borders = topojson.mesh(world, world.objects.countries, (a, b) => a !== b)
+    // json(
+       // "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json"
+       // ).then((world) => {
+       // land = topojson.feature(world, world.objects.land);
+       // borders = topojson.mesh(world, world.objects.countries, (a, b) => a !== b)
+    // });
+
+    onMount(async () => {
+    	const world = await fetch(
+      		"https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json"
+    	).then((d) => d.json());
+    	updateFilteredData();
+
+    	land = topojson.feature(world, world.objects.land);
+    	// console.log({ features })
+
+    	borders = topojson.mesh(world, world.objects.countries, (a, b) => a !== b);
     });
 
-
     const width = 1200;
-	const height = 600;
+    const height = 600;
 
     function coord_proj_cx(d) {
                 let coords = [  
@@ -77,8 +88,98 @@
                 .style('visibility', 'hidden')
     }
 
+    let selectedYear;
+    let prevSelectedYear = null;
+
+    let selectedLocation = null;
+    let prevSelectedLocation = null;
+
+    let filterState = {
+    	year: null, // Initialize with no year filter
+    	location: null, // Initialize with no location filter
+    };
+    let filteredVolcanos = volcanos;
+    const yearCategories = ["pre-1800s", "1800s", "1900s", "2000s"];
+
+    function filterByYear(year) {
+    if (year === "1800s") {
+      filterState.year = 1800;
+    } else if (year === "1900s") {
+      filterState.year = 1900;
+    } else if (year === "2000s") {
+      filterState.year = 2000;
+    } else if (year === "pre-1800s") {
+      filterState.year = "pre-1800s";
+    } else {
+      filterState.year = null; // Reset filter in other cases
+    }
+      updateFilteredData();
+    }
+
+    function filterByYearAndUpdateClass(category, button) {
+    // If same button pressed twice, deactivate it and change category to null
+    	if (selectedYear === category) {
+      		selectedYear = null;
+      		category = null;
+    	} else {
+      		// If not, change the selected year to the pressed button
+      		selectedYear = category;
+    	}
+
+    	// Deactivates the previously pressed button
+    	if (prevSelectedYear && prevSelectedYear !== button) {
+      		prevSelectedYear.setAttribute("class", "btn btn-outline-primary");
+    	}
+
+    	// Set the prevSelectedYear to the current button
+    	if (button) {
+      		button.setAttribute("class", "btn btn-primary");
+      		prevSelectedYear = button;
+    	}
+
+    	filterByYear(category);
+  }
+
+  function updateFilteredData() {
+    filteredVolcanos = volcanos.filter((d) => {
+      const yearMatches =
+        filterState.year === "pre-1800s"
+          ? d.year < 1800
+          : filterState.year !== null
+            ? d.year >= filterState.year && d.year <= filterState.year + 99
+            : true;
+      //const locationMatches = filterState.location ? d.location === filterState.location : true;
+      // console.log("Filtering by year:", filterState.year);
+      // console.log("Filtering by location:", filterState.location);
+      // console.log("Number of matches:", filteredVolcanos.length);
+
+      return yearMatches; //&& locationMatches;
+    });
+  }
+
     //console.log(volcanos);
 </script>
+
+<link
+  href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+  rel="stylesheet"
+  integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+  crossorigin="anonymous"
+/>
+
+<div class="buttons">
+  {#each yearCategories as category}
+    <button
+      class="btn"
+      class:btn-outline-primary={selectedYear !== category}
+      class:btn-primary={selectedYear === category}
+      on:click={() => filterByYearAndUpdateClass(category)}
+    >
+      {category}
+    </button>
+  {/each}
+</div>
+
 <div class="globe"> 
 
     <svg
@@ -98,12 +199,15 @@
         <path d={path_globe(borders)} fill="none" stroke="black" />
         <path d={path_globe(outline)} fill="none" stroke="black" />
 
-        {#each volcanos as d, i}
+        {#each filteredVolcanos as d, i}
                 <circle
                     cx={coord_proj_cx(d)}
                     cy={coord_proj_cy(d)}
-                    r=4
-                    fill={color_checker(d)}
+                    r={4*(d.Volcano_explosive_index)}
+        	    fill={d.Volcano_explosive_index > 5 ? 'red' : 'orange'}
+                    opacity={0.6}
+        	    stroke="gray"
+        	    role="button"
                     on:mouseover={
                             showTooltip(d)
                     }
