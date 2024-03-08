@@ -74,11 +74,6 @@
                 filterByYear(category);
         }
 
-        function filterByLocation(location) {
-                filterState.location = location;
-                updateFilteredData();
-        }
-
         function filterByLocationAndUpdateClass(location, button) {
                 // If same button pressed twice, deactivate it
                 if (selectedLocation === location) {
@@ -99,7 +94,8 @@
                         prevSelectedLocation = button;
                 }
 
-                filterByLocation(location);
+                filterState.location = location;
+                updateFilteredData();
         }
 
         function updateFilteredData() {
@@ -128,6 +124,7 @@
 
 		mesh = topojson.mesh(us, us.objects.states, (a, b) => a !== b);
 		
+
 	})
 
                 
