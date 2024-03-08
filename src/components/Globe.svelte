@@ -59,25 +59,12 @@
             return coords[0][1]
     }
 
-    function color_checker(d) {
-        if (d['country'] == "United States") {
-            return "red";
-        }
-        if (d['location'] == "Africa-E") {
-            return "orange";
-        }
-        if (d['country'] == "Cameroon") {
-            return "yellow";
-        }
-        return "black";
-    }
-
     function showTooltip(d) {
                 d3.select("#tooltip")
                   .style("visibility", "visible")
                   .html(`<b>${d.name}</b><br>Year: ${d.year}<br>Country: ${d.country}<br>Explosivity: ${
                     d.Volcano_explosive_index === "" ? "Unknown" : d.Volcano_explosive_index
-                }`)
+                }<br>Destruction Rank (From 1 to 15): ${d.damage_caused_rank}`)
                   .style("left", (event.pageX + 10) + "px")
                   .style("top", (event.pageY + 10) + "px");
                 console.log(d)
@@ -90,9 +77,6 @@
 
     let selectedYear;
     let prevSelectedYear = null;
-
-    let selectedLocation = null;
-    let prevSelectedLocation = null;
 
     let filterState = {
     	year: null, // Initialize with no year filter
@@ -216,6 +200,12 @@
                     }
                 />
         {/each}
+
+    	<circle cx="-35" cy="500" r="20" fill="orange" opacity={0.6} />
+    	<text x="-10" y="505" font-size="16px"> Explosivity less than 5 </text>
+    	<circle cx="-35" cy="550" r="20" fill="red" opacity={0.6} />
+    	<text x="-10" y="550" font-size="16px"> Explosivity greater </text>
+    	<text x="-10" y="565" font-size="16px"> than or equal to 5 </text>
     </svg>
 </div>
 
