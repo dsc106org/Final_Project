@@ -22,21 +22,17 @@
     <section class="WriteUp">
       <h1 class="title">Is Volcano Activity Increasing over the Years?</h1>
       <p class="para">
-        With the world facing the increasing and new recording temperatures
-        thanks to climate change, <br />
-        it's been theorized by experts that this may influence increasing occurences
-        in natural phenomenoms. <br />
-        One such predicted natural occurence are volcanic eruptions which is expected
-        to start increasing <br />
-        in both count, and explositivity over the upcoming years. This could prove
+        Volcano eruptions, while volatile, aren't often occuring with high frenquency and such occurences are often balanced out by the ability of predicting when they'll occur along with <br>
+        the positives that they can bring to nature. But with the world facing the increasing and new recording temperatures thanks to climate change, <br />
+        it's been theorized by experts that this may influence increasing occurences in natural phenomenoms, including volcanic eruptions. Therefore it may be that we're expected to start seeing increasing <br />
+        counts of volcanic eruptions with greater explositivity over the upcoming years. This could prove
         problematic as while <br />
         volcanos have many benefits, too many consecutive eruptions may endanger
         nearby civilizations <br />
         along with greatly reducing potential living space as our population continues
         to skyrocket. Along <br />
         with this, multiple volcano eruptions on a large scale could cause a cooling
-        event which would further <br />
-        worsen the global temperature.
+        event which would further worsen the global temperature.
       </p>
       <p class="para">Let's put this theory to the test. To determine the activity extent of volcanos currently, <br>
         we've plotted multiple historically recorded volcano eruptions ranging from some pre 1800s and even <br>
