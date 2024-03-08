@@ -265,7 +265,7 @@
                         d.year >= 0 ? d.year : d.year * -1 + " BC"
                   }<br>Location: ${d.location}<br>Explosivity: ${
                         d.Volcano_explosive_index === "" ? "Unknown" : d.Volcano_explosive_index
-                  }`)
+                  }<br>Destruction Rank (From 1 to 15): ${d.damage_caused_rank}`)
                   .style("left", (event.pageX + 10) + "px")
                   .style("top", (event.pageY + 10) + "px");
                 // console.log(d)
@@ -369,6 +369,12 @@
                                                                 />
                                                         {/if}
                                                 {/each}
+
+			<circle cx="950" cy="500" r="45" fill="orange" opacity={0.6} />
+      			<text x="1000" y="500" font-size="20px"> Explosivity less than 5 </text>
+     			 <circle cx="950" cy="600" r="45" fill="red" opacity={0.6} />
+      			<text x="1000" y="600" font-size="20px"> Explosivity greater </text>
+      			<text x="1000" y="620" font-size="20px"> than or equal to 5 </text>
                                         {/if}
                                 </svg>
                         

@@ -1,9 +1,8 @@
 <script>
-    import Scroller from "@sveltejs/svelte-scroller";
-    import App from '../components/App.svelte';
-  
-    let count, index, offset, progress;
+  import Scroller from "@sveltejs/svelte-scroller";
+  import App from "../components/App.svelte";
 
+  let count, index, offset, progress;
 </script>
 
 <Scroller
@@ -20,20 +19,40 @@
   </div> -->
 
   <div class="foreground" slot="foreground">
-    <section class="WriteUp">This is the first section.
+    <section class="WriteUp">
+      <h1 class="title">Is Volcano Activity Increasing over the Years?</h1>
+      <p>
+        With the world facing the increasing and new recording temperatures
+        thanks to climate change, <br />
+        it's been theorized by experts that this may influence increasing occurences
+        in natural phenomenoms. <br />
+        One such predicted natural occurence are volcanic eruptions which is expected
+        to start increasing <br />
+        in both count, and explositivity over the upcoming years. This could prove
+        problematic as while <br />
+        volcanos have many benefits, too many consecutive eruptions may endanger
+        nearby civilizations <br />
+        along with greatly reducing potential living space as our population continues
+        to skyrocket. Along <br />
+        with this, multiple volcano eruptions on a large scale could cause a cooling
+        event which would further <br />
+        worsen the global temperature.
+      </p>
+      <p>Let's put this theory to the test.</p>
     </section>
-    <section class="Graph"> Volcano records in the US over the past 200+ years. Choose one or multiple filters and explore!
+    <section class="Graph">
+      Volcano records in the US over the past 200+ years. Choose one or multiple
+      filters and explore!
       <p>Refresh the page if the graph isn't loading.</p>
-        <App />
+      <App />
     </section>
     <section class="WriteUp">This is the third section.</section>
   </div>
 </Scroller>
 
-
 <style>
-    .Graph {
-    height: 170vh;
+  .Graph {
+    height: 130vh;
     background-color: lightblue; /* 20% opaque */
     /* color: white; */
     outline: black;
@@ -43,8 +62,8 @@
     padding: 1em;
     margin: 0 0 2em 0;
     width: 100%;
-    margin-right:auto;
-    margin-left:auto;
+    margin-right: auto;
+    margin-left: auto;
   }
 
   .WriteUp {
@@ -57,5 +76,9 @@
     color: black;
     padding: 1em;
     margin: 0 0 2em 0;
+  }
+
+  .title {
+    padding: 1em;
   }
 </style>
