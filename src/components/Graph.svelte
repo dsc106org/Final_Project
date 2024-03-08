@@ -108,7 +108,6 @@
                         // console.log("Number of matches:", filteredVolcanos.length);
                         return yearMatches && locationMatches;
                 });
-                console.log(filteredVolcanos);
         }
 
         onMount(async () => {
@@ -124,8 +123,99 @@
 
 		mesh = topojson.mesh(us, us.objects.states, (a, b) => a !== b);
 		
+                let min_year = filteredVolcanos.reduce( (min, obj) => (obj.year < min ? obj.year : min), filteredVolcanos[0].year);
+                let max_year = filteredVolcanos.reduce( (max, obj) => (obj.year > max ? obj.year : max), filteredVolcanos[0].year);
+                console.log(min_year, max_year);
+                
+                // Function to update SVG when user resizes window
+                function updateSize() {
+                        var screenWidth = window.innerWidth;
+                        var screenHeight = window.innerHeight;
 
-	})
+                        svg.attr("width", screenWidth - margin.left - margin.right)
+                           .attr("height", screenHeight - margin.top - margin.bottom);
+
+                        var fontSize = Math.max(12, (screenWidth - margin.left - margin.right) / 110);
+
+                        // Update the x-axis scale
+                        scatterX.range([0, screenWidth/4 - margin.left - margin.right]);
+                        svg.select('.x-axis').call(d3.axisBottom(scatterX))
+                           .selectAll("text").style('font-size', fontSize + "px");
+
+
+                }
+
+                var screenWidth = window.innerWidth;
+                var screenHeight = window.innerHeight;
+
+                var margin = { top: 20, right: 20, bottom: 20, left: 20 };
+
+                var svgWidth = screenWidth - margin.left - margin.right;
+                var svgHeight = screenHeight - margin.top - margin.bottom;
+
+                let initialFontSize = Math.max(12, (screenWidth - margin.left - margin.right) / 110);
+
+                var svg = d3.select("#scatter")
+                        .append("svg")
+                        .attr("width", svgWidth + margin.left + margin.right)
+                        .attr("height", svgHeight + margin.top + margin.bottom)
+                        .append("g")
+                        .attr("transform",
+                                "translate(" + margin.left + "," + svgHeight/2 + ")");
+
+                // Add X axis
+                var x = d3.scaleLinear()
+                        .domain([min_year, max_year])
+                        .range([0, svgWidth/4 - margin.left - margin.right]);
+
+                var scatterX = d3.scaleLinear().domain([min_year, max_year]).range([0, svgWidth/3.5 - margin.left - margin.right]);
+                svg.append("g")
+                        .attr("class", "x-axis")
+                        .call(d3.axisBottom(scatterX))
+                        .attr("x", svgWidth / 2)
+                        .attr("y", margin.bottom)
+                        .style('font-size', initialFontSize+'px');
+
+                svg.append('text')
+                        .attr('class', 'x-label')
+                        .attr('text-anchor', 'middle')
+                        .attr('transform', 'translate(' + (svgWidth/3.5 - margin.left - margin.right - 8)/2 + ',' + (margin.bottom + 15) + ')')
+                        .text("Year")
+                        .style('font-size', fontSize+2 + 'px');
+
+                var scatterY = d3.scaleLinear().domain([1, 8]).range([0, svgWidth/3.5 - margin.left - margin.right]);
+                svg.append("g")
+                        .attr("class", "y-axis")
+                        .call(d3.axisBottom(scatterY))
+                        .attr("x", svgWidth / 2)
+                        .attr("y", margin.bottom)
+                        .style('font-size', initialFontSize+'px');
+
+                svg.append('text')
+                        .attr('class', 'x-label')
+                        .attr('text-anchor', 'middle')
+                        .attr('transform', 'translate(' + (svgWidth/3.5 - margin.left - margin.right - 8)/2 + ',' + (margin.bottom + 15) + ')')
+                        .text("Year")
+                        .style('font-size', fontSize+2 + 'px');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        
+                // updateSize when user resizes window
+                window.addEventListener("resize", updateSize);
+        })
 
                 
         function coord_proj_cx(d) {
@@ -210,7 +300,7 @@
 	// const height = 2000;
 
 
-</script>
+</script>       
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
@@ -239,87 +329,75 @@
         {/each}
 </div>
 
-<div class="volcanos">  
-        <svg viewBox="-260 10 1500 650">
-                <!--    If all the necessary data is loaded in  -->
-                {#if states && counties && mesh}
-                        <g fill="white" stroke="black">
-                                {#each states as feature, i}
-                                        <path d={path(feature)} 
-                                         on:mouseover={() => selected = feature} 
-                                         class="state" 
-                                         in:draw={{ delay: i * 50, duration: 500 }} 
-                                         />
-                                {/each}
-                        </g>
+<table class="map_plot_split">
+        <tr>
+                <th class="map_col">
+                        <div class="volcanos">  
+                                <svg viewBox="-260 10 1500 650">
+                                        <!--    If all the necessary data is loaded in  -->
+                                        {#if states && counties && mesh}
+                                                <g fill="white" stroke="black">
+                                                        {#each states as feature, i}
+                                                                <path d={path(feature)} 
+                                                                 on:mouseover={() => selected = feature} 
+                                                                 class="state" 
+                                                                 in:draw={{ delay: i * 50, duration: 500 }} 
+                                                                 />
+                                                        {/each}
+                                                </g>
+                                               
+                                                {#each US_volcanos as d, i}
+                                                        {#if filteredVolcanos.includes(d)}
+                                                                <!-- svelte-ignore a11y-interactive-supports-focus -->
+                                                                <!-- svelte-ignore a11y-mouse-events-have-key-events -->
+                                                                <circle
+                                                                 cx={coord_proj_cx(d)}
+                                                                 cy={coord_proj_cy(d)}
+                                                                 r={4*(d.Volcano_explosive_index)}
+                                                                 fill={d.Volcano_explosive_index > 5 ? 'red' : 'orange'}
+                                                                 opacity={0.6}
+                                                                 stroke="gray"
+                                                                 role="button"
+                                                                 order={`${d.year}`}
+                                                                 aria-label={`Volcano ${d.name}, Year: ${d.year}, Location: ${d.location}`}
+                                                                 on:mouseover={
+                                                                        showTooltip(d)
+                                                                 }
+                                                                 on:mouseleave={
+                                                                        hideTooltip(d)
+                                                                 }
+                                                                />
+                                                        {/if}
+                                                {/each}
+                                        {/if}
+                                </svg>
+                        
+                                <!-- <svg
+                                        {width}
+                                        {height}
+                                        viewBox="-120 -250 {width} {height}"
+                                        style:max-width="100%"
+                                        style:height="auto"
+                                        style:display="block"
+                                        style:margin="auto"
+                                        style:max-height="100%"
+                                        >   
+                        
+                                        <path d={path_globe(outline)} fill="#12dbff"/>
+                                        <path d={path_globe(graticule)} stroke="black" fill="none"/>
+                                        <path d={path_globe(land)} fill="green"/>
+                                        <path d={path_globe(borders)} fill="none" stroke="black" />
+                                        <path d={path_globe(outline)} fill="none" stroke="black" />
+                                </svg> -->
+                        </div>
+                </th>
+                <th class="plot_col">
+                        <div id="scatter">
+                        </div>
+                </th>
+        </tr>
+</table>
 
-                        {#each US_volcanos as d, i}
-                                {#if filteredVolcanos.includes(d)}
-                                        <!-- svelte-ignore a11y-interactive-supports-focus -->
-                                        <!-- svelte-ignore a11y-mouse-events-have-key-events -->
-                                        <circle
-                                         cx={coord_proj_cx(d)}
-                                         cy={coord_proj_cy(d)}
-                                         r={10 ** (d.Volcano_explosive_index - 4.7)}
-                                         fill={d.Volcano_explosive_index > 5 ? 'red' : 'orange'}
-                                         opacity={0.6}
-                                         stroke="gray"
-                                         role="button"
-                                         aria-label={`Volcano ${d.name}, Year: ${d.year}, Location: ${d.location}`}
-                                         on:mouseover={
-                                                showTooltip(d)
-                                         }
-                                         on:mouseleave={
-                                                hideTooltip(d)
-                                         }
-                                        />
-                                {/if}
-                        {/each}     
-
-                        {#each US_volcanos as d, i}
-                                {#if filteredVolcanos.includes(d)}
-                                        <!-- svelte-ignore a11y-interactive-supports-focus -->
-                                        <!-- svelte-ignore a11y-mouse-events-have-key-events -->
-                                        <circle
-                                         cx={coord_proj_cx(d)}
-                                         cy={coord_proj_cy(d)}
-                                         r={4*(d.Volcano_explosive_index)}
-                                         fill={d.Volcano_explosive_index > 5 ? 'red' : 'orange'}
-                                         opacity={0.6}
-                                         stroke="gray"
-                                         role="button"
-                                         order={`${d.year}`}
-                                         aria-label={`Volcano ${d.name}, Year: ${d.year}, Location: ${d.location}`}
-                                         on:mouseover={
-                                                showTooltip(d)
-                                         }
-                                         on:mouseleave={
-                                                hideTooltip(d)
-                                         }
-                                        />
-                                {/if}
-                        {/each}
-                {/if}
-        </svg>
-
-        <!-- <svg
-                {width}
-                {height}
-                viewBox="-120 -250 {width} {height}"
-                style:max-width="100%"
-                style:height="auto"
-                style:display="block"
-                style:margin="auto"
-                style:max-height="100%"
-                >   
-
-                <path d={path_globe(outline)} fill="#12dbff"/>
-                <path d={path_globe(graticule)} stroke="black" fill="none"/>
-                <path d={path_globe(land)} fill="green"/>
-                <path d={path_globe(borders)} fill="none" stroke="black" />
-                <path d={path_globe(outline)} fill="none" stroke="black" />
-        </svg> -->
-</div>
 <div id='tooltip'/>
 <style>
         #tooltip {
@@ -341,5 +419,16 @@
         @keyframes fadeIn {
                 0% { opacity: 0; }
                 100% { opacity: 1; }
+        }
+        .map_plot_split {
+                table-layout: fixed;
+                text-align: center;
+                width: 100%;
+        }
+        .map_col {
+                width: 70%;
+        }
+        .plot_col {
+                width: 30%;
         }
 </style>
