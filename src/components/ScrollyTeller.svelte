@@ -21,7 +21,7 @@
   <div class="foreground" slot="foreground">
     <section class="WriteUp">
       <h1 class="title">Is Volcano Activity Increasing over the Years?</h1>
-      <p>
+      <p class="para">
         With the world facing the increasing and new recording temperatures
         thanks to climate change, <br />
         it's been theorized by experts that this may influence increasing occurences
@@ -38,12 +38,16 @@
         event which would further <br />
         worsen the global temperature.
       </p>
-      <p>Let's put this theory to the test.</p>
+      <p class="para">Let's put this theory to the test. To determine the activity extent of volcanos currently, <br>
+        we've plotted multiple historically recorded volcano eruptions ranging from some pre 1800s and even <br>
+        in the BC, all the way to the 2000s. Try exploring and hovering the US map first and compare the occurences <br>
+        and intensitivity of eruptions between years. For an extra activity, try to find the eruptions <br>
+        with the highest destructive rank. Then switch the US map and try exploring similar or different trends! </p>
     </section>
     <section class="Graph">
-      Volcano records in the US over the past 200+ years. Choose one or multiple
-      filters and explore!
-      <p>Refresh the page if the graph isn't loading.</p>
+      US Volcano records over the past 200+ years. Choose one or multiple
+      filters and explore! Switch to the world map for even further exploration:
+  
       <App />
     </section>
     <section class="WriteUp">This is the third section.</section>
@@ -80,5 +84,9 @@
 
   .title {
     padding: 1em;
+  }
+
+  .para {
+    padding: 1em
   }
 </style>
