@@ -37,15 +37,15 @@
 
         function filterByYear(year) {
                 if (year === '1800s') {
-                filterState.year = 1800;
+                        filterState.year = 1800;
                 } else if (year === '1900s') {
-                filterState.year = 1900;
+                        filterState.year = 1900;
                 } else if (year === '2000s') {
-                filterState.year = 2000;
+                        filterState.year = 2000;
                 } else if (year === 'pre-1800s') {
-                filterState.year = 'pre-1800s'; 
+                        filterState.year = 'pre-1800s'; 
                 } else {
-                filterState.year = null; // Reset filter in other cases
+                        filterState.year = null; // Reset filter in other cases
                 }
                 updateFilteredData(); 
         }
@@ -110,9 +110,9 @@
                 });
         }
 
+
         onMount(async () => {
-		const us = await fetch('https://cdn.jsdelivr.net/npm/us-atlas@3/counties-albers-10m.json')
-			.then(d => d.json())
+		const us = await fetch('https://cdn.jsdelivr.net/npm/us-atlas@3/counties-albers-10m.json').then(d => d.json())
                 updateFilteredData();
 		// console.log({ us })
 		
@@ -122,81 +122,93 @@
 		counties = topojson.feature(us, us.objects.counties).features;
 
 		mesh = topojson.mesh(us, us.objects.states, (a, b) => a !== b);
-		
+
                 let min_year = filteredVolcanos.reduce( (min, obj) => (obj.year < min ? obj.year : min), filteredVolcanos[0].year);
                 let max_year = filteredVolcanos.reduce( (max, obj) => (obj.year > max ? obj.year : max), filteredVolcanos[0].year);
                 console.log(min_year, max_year);
                 
                 // Function to update SVG when user resizes window
                 function updateSize() {
-                        var screenWidth = window.innerWidth;
-                        var screenHeight = window.innerHeight;
 
-                        svg.attr("width", screenWidth - margin.left - margin.right)
-                           .attr("height", screenHeight - margin.top - margin.bottom);
+                        var svgWidth = parseFloat(d3.select('svg').style('width'))/3;
+                        var svgHeight = parseFloat(d3.select('svg').style('height'));
 
-                        var fontSize = Math.max(12, (screenWidth - margin.left - margin.right) / 110);
+
+                        svg.attr("width", svgWidth + margin.left + margin.right)
+                           .attr("height", svgWidth + margin.left + margin.right)
+
+                        var fontSize = Math.max(12, (svgWidth - margin.left - margin.right) / 110);
 
                         // Update the x-axis scale
-                        scatterX.range([0, screenWidth/4 - margin.left - margin.right]);
+                        scatterX.range([0, svgWidth]);
                         svg.select('.x-axis').call(d3.axisBottom(scatterX))
                            .selectAll("text").style('font-size', fontSize + "px");
 
+                        // Update the y-axis scale
+                        scatterX.range([0, svgHeight]);
+                        svg.select('.y-axis').call(d3.axisLeft(scatterY))
+                           .selectAll("text").style('font-size', fontSize + "px");
+                        console.log("Update size");
 
                 }
 
-                var screenWidth = window.innerWidth;
-                var screenHeight = window.innerHeight;
+                console.log("Testing");
+                
+                
+                var margin = { top: 20, right: 50, bottom: 50, left: 20 };
+                
+                var svgWidth = parseFloat(d3.select('svg').style('width'))/3;
+                var svgHeight = parseFloat(d3.select('svg').style('height'));
 
-                var margin = { top: 20, right: 20, bottom: 20, left: 20 };
 
-                var svgWidth = screenWidth - margin.left - margin.right;
-                var svgHeight = screenHeight - margin.top - margin.bottom;
 
-                let initialFontSize = Math.max(12, (screenWidth - margin.left - margin.right) / 110);
+                let initialFontSize = Math.max(12, (svgWidth - margin.left - margin.right) / 110);
+                console.log(svgWidth, svgHeight, "Dimensions");
+                console.log(margin);
 
                 var svg = d3.select("#scatter")
                         .append("svg")
                         .attr("width", svgWidth + margin.left + margin.right)
-                        .attr("height", svgHeight + margin.top + margin.bottom)
+                        .attr("height", svgHeight)
                         .append("g")
-                        .attr("transform",
-                                "translate(" + margin.left + "," + svgHeight/2 + ")");
 
-                // Add X axis
-                var x = d3.scaleLinear()
-                        .domain([min_year, max_year])
-                        .range([0, svgWidth/4 - margin.left - margin.right]);
-
-                var scatterX = d3.scaleLinear().domain([min_year, max_year]).range([0, svgWidth/3.5 - margin.left - margin.right]);
+                // x-axis
+                var scatterX = d3.scaleLinear().domain([min_year, max_year]).range([0, svgWidth]);
                 svg.append("g")
                         .attr("class", "x-axis")
-                        .call(d3.axisBottom(scatterX))
-                        .attr("x", svgWidth / 2)
-                        .attr("y", margin.bottom)
-                        .style('font-size', initialFontSize+'px');
-
+                        .style('font-size', initialFontSize+'px')
+                        .attr("transform",
+                                "translate(" + margin.left + "," + (svgHeight - margin.bottom) + ")")
+                        .call(d3.axisBottom(scatterX));
+                                
+                // x-axis label
                 svg.append('text')
                         .attr('class', 'x-label')
                         .attr('text-anchor', 'middle')
-                        .attr('transform', 'translate(' + (svgWidth/3.5 - margin.left - margin.right - 8)/2 + ',' + (margin.bottom + 15) + ')')
+                        .attr('transform', 'translate(' + (svgHeight - 8)/2 + ',' + (margin.bottom + 15) + ')')
                         .text("Year")
-                        .style('font-size', fontSize+2 + 'px');
-
-                var scatterY = d3.scaleLinear().domain([1, 8]).range([0, svgWidth/3.5 - margin.left - margin.right]);
+                        .style('font-size', initialFontSize+2 + 'px')
+                        // .attr("transform",
+                        //         "translate(" + (margin.left + svgWidth/2) + "," + (-margin.bottom + 30) + ")");
+                console.log("SVGHEIGHT: " ,svgHeight);
+                
+                // y-axis
+                var scatterY = d3.scaleLinear().domain([8, 0]).range([0, svgWidth]);
                 svg.append("g")
                         .attr("class", "y-axis")
-                        .call(d3.axisBottom(scatterY))
-                        .attr("x", svgWidth / 2)
-                        .attr("y", margin.bottom)
-                        .style('font-size', initialFontSize+'px');
-
+                        .call(d3.axisLeft(scatterY))
+                        .attr('text-anchor', 'end')
+                        .style('font-size', initialFontSize+'px')
+                         .attr('transform',
+                                 'translate(' + margin.left + ',' + (margin.bottom) + ')')
+                // y-axis label
                 svg.append('text')
-                        .attr('class', 'x-label')
+                        .attr('class', 'y-label')
                         .attr('text-anchor', 'middle')
-                        .attr('transform', 'translate(' + (svgWidth/3.5 - margin.left - margin.right - 8)/2 + ',' + (margin.bottom + 15) + ')')
-                        .text("Year")
-                        .style('font-size', fontSize+2 + 'px');
+                        .attr('text-align', 'center')
+                        // .attr('transform', 'translate(0,' + (-svgHeight / 2) + ') rotate(-90)')
+                        .text("Explosivity")
+                        .style('font-size', initialFontSize + 2 + 'px');
 
 
 
@@ -345,7 +357,7 @@
                                                                  />
                                                         {/each}
                                                 </g>
-                                               
+ 
                                                 {#each US_volcanos as d, i}
                                                         {#if filteredVolcanos.includes(d)}
                                                                 <!-- svelte-ignore a11y-interactive-supports-focus -->
@@ -370,11 +382,11 @@
                                                         {/if}
                                                 {/each}
 
-			<circle cx="950" cy="500" r="45" fill="orange" opacity={0.6} />
-      			<text x="1000" y="500" font-size="20px"> Explosivity less than 5 </text>
-     			 <circle cx="950" cy="600" r="45" fill="red" opacity={0.6} />
-      			<text x="1000" y="600" font-size="20px"> Explosivity greater </text>
-      			<text x="1000" y="620" font-size="20px"> than or equal to 5 </text>
+                                                <circle cx="950" cy="500" r="45" fill="orange" opacity={0.6} />
+                                                <text x="1000" y="500" font-size="20px"> Explosivity less than 5 </text>
+                                                <circle cx="950" cy="600" r="45" fill="red" opacity={0.6} />
+                                                <text x="1000" y="600" font-size="20px"> Explosivity greater </text>
+                                                <text x="1000" y="620" font-size="20px"> than or equal to 5 </text>
                                         {/if}
                                 </svg>
                         
@@ -418,8 +430,8 @@
         }
 
 	.volcanos {
-                animation: fadeIn 1s;;
-                animation-delay: 0s;; 
+                animation: fadeIn 1s;
+                animation-delay: 0s; 
         }
 
         @keyframes fadeIn {
@@ -432,7 +444,7 @@
                 width: 100%;
         }
         .map_col {
-                width: 70%;
+                width: 60%;
         }
         .plot_col {
                 width: 30%;
