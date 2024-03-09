@@ -409,10 +409,10 @@
                                 </svg> -->
                         </div>
                 </th>
-                <th class="plot_col">
+                <!-- <th class="plot_col">
                         <div id="scatter">
                         </div>
-                </th>
+                </th> -->
         </tr>
 </table>
 
