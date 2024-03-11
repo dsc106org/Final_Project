@@ -105,7 +105,7 @@
   }
 
   .Conclusion {
-    height: 100vh;
+    height: 130vh;
     background-color: rgba(0, 0, 0, 0.2); /* 20% opaque */
     /* color: white; */
     outline: black;
