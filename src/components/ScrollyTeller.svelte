@@ -42,7 +42,7 @@
   
       <App />
     </section>
-    <section class="conclusion">
+    <section class="Conclusion">
       <h1 class="title">Overall Conclusions:</h1>
       <p class="para"> Starting with the US map, you'll notice a lot of the more explosive volcanos were more from the past pre 1800s. <br>
           This isn't too suprising since this age covered a much larger gap in time compared to the 1800s, 1900s and 2000s. <br>
