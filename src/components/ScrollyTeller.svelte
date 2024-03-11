@@ -42,7 +42,7 @@
   
       <App />
     </section>
-    <section class="WriteUp">
+    <section class="conclusion">
       <h1 class="title">Overall Conclusions:</h1>
       <p class="para"> Starting with the US map, you'll notice a lot of the more explosive volcanos were more from the past pre 1800s. <br>
           This isn't too suprising since this age covered a much larger gap in time compared to the 1800s, 1900s and 2000s. <br>
@@ -94,6 +94,18 @@
 
   .WriteUp {
     height: 80vh;
+    background-color: rgba(0, 0, 0, 0.2); /* 20% opaque */
+    /* color: white; */
+    outline: black;
+    text-align: center;
+    max-width: 5000px; /* adjust at will */
+    color: black;
+    padding: 1em;
+    margin: 0 0 2em 0;
+  }
+
+  .Conclusion {
+    height: 100vh;
     background-color: rgba(0, 0, 0, 0.2); /* 20% opaque */
     /* color: white; */
     outline: black;
