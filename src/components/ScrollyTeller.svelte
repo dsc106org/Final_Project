@@ -42,7 +42,8 @@
   
       <App />
     </section>
-    <section class="WriteUp">Overall Conclusions:</section>
+    <section class="WriteUp">
+      <h1 class="title">Overall Conclusions:</h1>
       <p class="para"> Starting with the US map, you'll notice a lot of the more explosive volcanos were more from the past pre 1800s. <br>
           This isn't too suprising since this age covered a much larger gap in time compared to the 1800s, 1900s and 2000s. <br>
           Aggregating on the timelines themsleves, we seem to see a much smaller decrease in explosiveness for volcanos before <br>
@@ -71,6 +72,7 @@
           change is supported by the plot and we can see some evidence of both occuring on the US and world map. The next step would be to follow <br>
           up this confirmation with further data exploration and data binning from the 1800s to present.
       </p>
+      </section>
   </div>
 </Scroller>
 
