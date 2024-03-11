@@ -141,11 +141,14 @@
 
                         // Update the x-axis scale
                         scatterX.range([0, svgWidth]);
+                        scatterY.range([0, svgWidth * yScale])
                         svg.select('.x-axis').call(d3.axisBottom(scatterX))
                            .selectAll("text").style('font-size', fontSize + "px");
 
+                        var yOffset = Math.abs( min_year / (max_year - min_year)) * svgWidth;
+
                         // Update the y-axis scale
-                        scatterX.range([0, svgHeight]);
+                        scatterY.range([0, svgHeight]);
                         svg.select('.y-axis').call(d3.axisLeft(scatterY))
                            .selectAll("text").style('font-size', fontSize + "px");
                         console.log("Update size");
@@ -168,45 +171,58 @@
 
                 var svg = d3.select("#scatter")
                         .append("svg")
-                        .attr("width", svgWidth + margin.left + margin.right)
+                        .attr("width", svgWidth + margin.left*3 + margin.right)
                         .attr("height", svgHeight)
                         .append("g")
 
+                        
                 // x-axis
                 var scatterX = d3.scaleLinear().domain([min_year, max_year]).range([0, svgWidth]);
                 svg.append("g")
                         .attr("class", "x-axis")
                         .style('font-size', initialFontSize+'px')
                         .attr("transform",
-                                "translate(" + margin.left + "," + (svgHeight - margin.bottom) + ")")
+                                "translate(" + margin.left*3 + "," + (svgWidth + margin.top) + ")")
                         .call(d3.axisBottom(scatterX));
-                                
+                
+                var yOffset = Math.abs( min_year / (max_year - min_year)) * svgWidth;
+                let yScale = 3/4;
+
+                // y-axis without tick marks
+                var scatterY = d3.scaleLinear().domain([8, 0]).range([0, svgWidth * yScale]);
+                // svg.append("g")
+                //         .attr("class", "y-axis")
+                //         .call(d3.axisLeft(scatterY))
+                //         .attr('text-anchor', 'end')
+                //         .style('font-size', '0px')
+                //         .attr('transform',
+                //                  'translate(' + (margin.left*3 + yOffset) + ',' + (margin.top + svgWidth/4 ) + ')')
+        
+                // tick marks
+                var yMarks = svg.append("g")
+                        .attr("class", "y-axis-marks")
+                        .call(d3.axisLeft(scatterY).tickValues([1,2,3,4,5,6,7,8 ]))
+                        .attr('text-anchor', 'end')
+                        .style('font-size', initialFontSize+'px')
+                        .attr('transform',
+                                'translate(' + (margin.left*2.5) + ',' + (margin.top + svgWidth/4 ) + ')')
+                // yMarks.select('.domain').style('stroke', 'none');
+
                 // x-axis label
                 svg.append('text')
                         .attr('class', 'x-label')
-                        .attr('text-anchor', 'middle')
-                        .attr('transform', 'translate(' + (svgHeight - 8)/2 + ',' + (margin.bottom + 15) + ')')
                         .text("Year")
                         .style('font-size', initialFontSize+2 + 'px')
-                        // .attr("transform",
-                        //         "translate(" + (margin.left + svgWidth/2) + "," + (-margin.bottom + 30) + ")");
-                console.log("SVGHEIGHT: " ,svgHeight);
+                        .attr("transform",
+                                "translate(" + (margin.left*3 + svgWidth/2 - (initialFontSize+7) ) + "," + (margin.top + svgWidth + margin.bottom) + ")");
+
                 
-                // y-axis
-                var scatterY = d3.scaleLinear().domain([8, 0]).range([0, svgWidth]);
-                svg.append("g")
-                        .attr("class", "y-axis")
-                        .call(d3.axisLeft(scatterY))
-                        .attr('text-anchor', 'end')
-                        .style('font-size', initialFontSize+'px')
-                         .attr('transform',
-                                 'translate(' + margin.left + ',' + (margin.bottom) + ')')
                 // y-axis label
                 svg.append('text')
                         .attr('class', 'y-label')
                         .attr('text-anchor', 'middle')
                         .attr('text-align', 'center')
-                        // .attr('transform', 'translate(0,' + (-svgHeight / 2) + ') rotate(-90)')
+                        .attr('transform', 'translate(' + (margin.left) + ',' + (margin.top + svgWidth * (1-yScale) + (svgWidth*yScale/2)) + ') rotate(-90)')
                         .text("Explosivity")
                         .style('font-size', initialFontSize + 2 + 'px');
 
@@ -343,10 +359,6 @@
 
 <table class="map_plot_split">
         <tr>
-                <th class="plot_col">
-                        <!-- <div id="scatter">
-                        </div> -->
-                </th>
                 <th class="map_col">
                         <div class="volcanos">  
                                 <svg viewBox="-260 10 1500 650">
@@ -414,8 +426,8 @@
                         </div>
                 </th>
                 <th class="plot_col">
-                        <!-- <div id="scatter">
-                        </div> -->
+                        <div id="scatter">
+                        </div>
                 </th>
         </tr>
 </table>
@@ -442,8 +454,7 @@
                 0% { opacity: 0; }
                 100% { opacity: 1; }
         }
-        .map_plot_split {
-                table-layout: fixed;
+        .map_plot_split {       
                 text-align: center;
                 width: 100%;
         }
@@ -451,6 +462,6 @@
                 width: 60%;
         }
         .plot_col {
-                width: 15%;
+                width: 30%;
         }
 </style>
