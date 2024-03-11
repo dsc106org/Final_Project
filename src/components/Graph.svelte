@@ -343,6 +343,10 @@
 
 <table class="map_plot_split">
         <tr>
+                <th class="plot_col">
+                        <!-- <div id="scatter">
+                        </div> -->
+                </th>
                 <th class="map_col">
                         <div class="volcanos">  
                                 <svg viewBox="-260 10 1500 650">
@@ -366,7 +370,7 @@
                                                                  cx={coord_proj_cx(d)}
                                                                  cy={coord_proj_cy(d)}
                                                                  r={4*(d.Volcano_explosive_index)}
-                                                                 fill={d.Volcano_explosive_index > 5 ? 'red' : 'orange'}
+                                                                 fill={d.Volcano_explosive_index >= 5 ? 'red' : '#ffca20'}
                                                                  opacity={0.6}
                                                                  stroke="gray"
                                                                  role="button"
@@ -409,10 +413,10 @@
                                 </svg> -->
                         </div>
                 </th>
-                <!-- <th class="plot_col">
-                        <div id="scatter">
-                        </div>
-                </th> -->
+                <th class="plot_col">
+                        <!-- <div id="scatter">
+                        </div> -->
+                </th>
         </tr>
 </table>
 
@@ -447,6 +451,6 @@
                 width: 60%;
         }
         .plot_col {
-                width: 30%;
+                width: 15%;
         }
 </style>

@@ -188,7 +188,7 @@
                     cx={coord_proj_cx(d)}
                     cy={coord_proj_cy(d)}
                     r={4*(d.Volcano_explosive_index)}
-        	    fill={d.Volcano_explosive_index > 5 ? 'red' : 'orange'}
+        	    fill={d.Volcano_explosive_index >= 5 ? 'red' : '#ffca20'}
                     opacity={0.6}
         	    stroke="gray"
         	    role="button"

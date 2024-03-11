@@ -20,21 +20,25 @@
 
   <div class="foreground" slot="foreground">
     <section class="WriteUp">
-      <h1 class="title">Is Volcano Activity Increasing over the Years?</h1>
+      <h1 class="title">Are Volcanoes Becoming Deadlier?</h1>
+      <h2> A visualization by David Lycke, Dhilan Sunanda Bong, and Joshua Huang</h2>
+      <div class='pad'></div>
       <p class="para">
-        Volcano eruptions, while volatile, aren't often occuring with high frenquency and such occurences are often balanced out by the ability of <br>
-        predicting when they'll occur along with the positives that they can bring to nature. But with the world facing the increasing and new recording <br>
-        temperatures thanks to climate change, it's been theorized by experts that this may influence increasing occurences in natural phenomenoms, <br>
-        including volcanic eruptions. Therefore, it may be possible that we're expecting to see increasing counts of volcanic eruptions with greater <br>
-        explositivity over the upcoming years. This could prove problematic as while volcanos have many benefits, too many consecutive eruptions may <br>
-        endanger nearby civilizations along with greatly reducing potential living space as our population continues to skyrocket. Along with this, <br>
-        multiple volcano eruptions on a large scale could cause a cooling event which would further worsen the global temperature.
+        Volcano eruptions, while volatile, don't happen often and we are also able to predict when they'll occur. <br> 
+        However, with the world facing record high temperatures because of climate change, <br>
+        experts theorized that this warming may lead to increasing frequency of some natural phenomenoms, <br>
+        including volcanic eruptions. 
+      </p>
+      <p class='para'>
+        As such, we could expect to see increasing counts of volcanic eruptions with greater explositivity over the upcoming years. <br> 
+        This could prove problematic as consecutive eruptions will whittle down our livable space, all the while our population continues to skyrocket. <br> 
+        Along with that, multiple volcano eruptions on a large scale could lead to a cooling event which could destroy ecosystems.
       </p>
       <p class="para">Let's put this theory to the test. To determine the activity extent of volcanos currently, <br>
-        we've plotted multiple historically recorded volcano eruptions ranging from some pre 1800s and even <br>
-        in the BC, all the way to the 2000s. Try exploring and hovering the US map first and compare the occurences <br>
-        and intensitivity of eruptions between years. For an extra activity, try to find the eruptions <br>
-        with the highest destructive rank. Then switch the US map and try exploring similar or different trends! </p>
+        we've plotted multiple historically recorded volcano eruptions ranging from all the way in the BC period to the near present. <br> 
+        Try exploring and hovering the US map first and compare the occurences and intensity of eruptions between years. <br>
+        For an extra activity, try to find the eruptions with the highest destructive rank. Then, switch to the global map and try exploring similar or different trends! </p>
+        
     </section>
     <section class="Graph">
       US Volcano records over the past 200+ years. Choose one or multiple
@@ -60,10 +64,11 @@
     width: 100%;
     margin-right: auto;
     margin-left: auto;
+    margin-top: 0px;
   }
 
   .WriteUp {
-    height: 80vh;
+    height: 100vh;
     background-color: rgba(0, 0, 0, 0.2); /* 20% opaque */
     /* color: white; */
     outline: black;
@@ -80,5 +85,15 @@
 
   .para {
     padding: 1em
+  }
+
+  h2 {
+    text-align:center;
+    font-size: 18px;
+    color:gray;
+    margin: 2px;
+  }
+  .pad {
+    margin:15vh;
   }
 </style>
