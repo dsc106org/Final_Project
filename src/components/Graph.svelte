@@ -33,7 +33,6 @@
                 location: null // Initialize with no location filter
          };
         let filteredVolcanos; 
-        let closestIndex = -1;
 
         function filterByYear(year) {
                 if (year === '1800s') {
@@ -99,7 +98,6 @@
         }
 
         function updateFilteredData() {
-                closestIndex = -1;
                 filteredVolcanos = US_volcanos.filter(d => {
                         const yearMatches = filterState.year === 'pre-1800s' ? d.year < 1800 : filterState.year !== null ? d.year >= filterState.year && d.year <= filterState.year + 99 : true; 
                         const locationMatches = filterState.location ? d.location === filterState.location : true;
@@ -142,6 +140,7 @@
                         // Update the x-axis scale
                         scatterX.range([0, svgWidth]);
                         scatterY.range([0, svgWidth * yScale])
+
                         svg.select('.x-axis').call(d3.axisBottom(scatterX))
                            .selectAll("text").style('font-size', fontSize + "px");
 
@@ -151,7 +150,7 @@
                         scatterY.range([0, svgHeight]);
                         svg.select('.y-axis').call(d3.axisLeft(scatterY))
                            .selectAll("text").style('font-size', fontSize + "px");
-                        console.log("Update size");
+                        console.log("Update size", svgWidth, svgHeight);
 
                 }
 
@@ -227,7 +226,18 @@
                         .style('font-size', initialFontSize + 2 + 'px');
 
 
+                var dots = svg.append('g')
+                                .selectAll('dot')
+                                .data(filteredVolcanos)
+                                .enter()
+                                .append('circle')
+                                .attr('cx', function (d) { return scatterX(d.year); })
+                                .attr('cy', function (d) { return scatterY(d.Volcano_explosive_index); })
+                                .attr('r', 2)
+                                .style('fill', 'red')
+                                // .attr('transform', 'translate(' + (margin.left * 3 + yOffset) + ',' + (margin.top + svgWidth/3) + ')');
 
+                                 
 
 
 
@@ -374,8 +384,7 @@
                                                         {/each}
                                                 </g>
  
-                                                {#each US_volcanos as d, i}
-                                                        {#if filteredVolcanos.includes(d)}
+                                                {#each filteredVolcanos as d, i}
                                                                 <!-- svelte-ignore a11y-interactive-supports-focus -->
                                                                 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
                                                                 <circle
@@ -395,7 +404,6 @@
                                                                         hideTooltip(d)
                                                                  }
                                                                 />
-                                                        {/if}
                                                 {/each}
 
                                                 <circle cx="950" cy="500" r="45" fill="orange" opacity={0.6} />
