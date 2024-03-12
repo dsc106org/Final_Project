@@ -21,6 +21,10 @@
         let counties = [];
         let mesh;
         let selected;
+	
+	let test = 0;
+  	let select = 1;
+	let mapped = select;
         
         let selectedYear;
         let prevSelectedYear = null;
@@ -51,7 +55,9 @@
 
         function filterByYearAndUpdateClass(category, button) {
                 // If same button pressed twice, deactivate it and change category to null
-                if (selectedYear === category) {
+                select = 1;
+    		test = 0; 
+		if (selectedYear === category) {
                         selectedYear = null;
                         category = null;
                 } else {
@@ -75,6 +81,8 @@
 
         function filterByLocationAndUpdateClass(location, button) {
                 // If same button pressed twice, deactivate it
+		select = 1;
+    		test = 0; 
                 if (selectedLocation === location) {
                         selectedLocation = null;
                         location = null;
@@ -104,6 +112,7 @@
                         // console.log("Filtering by year:", filterState.year);
                         // console.log("Filtering by location:", filterState.location);
                         // console.log("Number of matches:", filteredVolcanos.length);
+			slicing = filteredVolcanos;
                         return yearMatches && locationMatches;
                 });
         }
@@ -337,6 +346,11 @@
         // const width = 1200;
 	// const height = 2000;
 
+  	$: mapper = select;
+
+  	$: if (test === 0) {
+    		slicing = filteredVolcanos.slice(0, mapper);
+  	}
 
 </script>       
 
@@ -367,6 +381,23 @@
         {/each}
 </div>
 
+<button
+  class="one"
+  on:click={() => (select += 1)}
+  on:click={() => updateFilteredData()}
+  on:click={() => (test = 0)}
+>
+  Get Next Eruption
+</button>
+<button
+  class="all"
+  on:click={() => (test = 1)}
+  on:click={() => updateFilteredData()}
+  on:click={() => (select = 0)}
+>
+  Get All Eruptions
+</button>
+
 <table class="map_plot_split">
         <tr>
                 <th class="map_col">
@@ -384,7 +415,7 @@
                                                         {/each}
                                                 </g>
  
-                                                {#each filteredVolcanos as d, i}
+                                                {#each slicing as d, i}
                                                                 <!-- svelte-ignore a11y-interactive-supports-focus -->
                                                                 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
                                                                 <circle
@@ -404,6 +435,15 @@
                                                                         hideTooltip(d)
                                                                  }
                                                                 />
+							{#if i + 1 === select}
+                						<circle
+                  						class="erupt"
+                  						cx={coord_proj_cx(d)}
+                 						cy={coord_proj_cy(d)}
+                  						r={(4*(d.Volcano_explosive_index)+4)/2}
+                  						fill='magenta'
+                						/>
+                					{/if}
                                                 {/each}
 
                                                 <circle cx="950" cy="500" r="45" fill="orange" opacity={0.6} />
@@ -472,4 +512,34 @@
         .plot_col {
                 width: 30%;
         }
+
+	.all {
+    		background-color: #8b0000;
+    		border: white;    
+    		transition-duration: 0.4s;
+    		color: white;
+    		margin:5px;  
+    		text-align: center;  
+  	}
+
+  	.all:hover{
+        	background-color: red;
+        	border :#04AA6D;
+        }
+  
+  	.one {
+    		background-color: orange;
+    		border: white;    
+    		transition-duration: 0.4s;
+    		color: white;    
+  	}
+
+  	.one:hover{
+        	background-color: red;
+        	border :#04AA6D;
+    	}
+
+ 	.erupt {
+    		animation: fadeIn 0.5s;
+  	}
 </style>
