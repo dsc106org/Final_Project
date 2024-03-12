@@ -36,7 +36,8 @@
                 year: null, // Initialize with no year filter
                 location: null // Initialize with no location filter
          };
-        let filteredVolcanos; 
+        let filteredVolcanos = US_volcanos;
+  	let slicing = filteredVolcanos;
 
         function filterByYear(year) {
                 if (year === '1800s') {
@@ -421,7 +422,7 @@
                                                                 <circle
                                                                  cx={coord_proj_cx(d)}
                                                                  cy={coord_proj_cy(d)}
-                                                                 r={4*(d.Volcano_explosive_index)}
+                                                                 r={4*(d.Volcano_explosive_index)+4}
                                                                  fill={d.Volcano_explosive_index >= 5 ? 'red' : '#ffca20'}
                                                                  opacity={0.6}
                                                                  stroke="gray"
