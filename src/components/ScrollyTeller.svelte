@@ -82,7 +82,7 @@
 
 <style>
   .Graph {
-    height: 130vh;
+    height: 110vh;
     background-color: lightblue; /* 20% opaque */
     /* color: white; */
     outline: black;
