@@ -420,6 +420,7 @@
                                                                 <!-- svelte-ignore a11y-interactive-supports-focus -->
                                                                 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
                                                                 <circle
+								 class="erupt"
                                                                  cx={coord_proj_cx(d)}
                                                                  cy={coord_proj_cy(d)}
                                                                  r={4*(d.Volcano_explosive_index)+4}
