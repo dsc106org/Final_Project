@@ -213,7 +213,7 @@
         <path d={path_globe(borders)} fill="none" stroke="black" />
         <path d={path_globe(outline)} fill="none" stroke="black" />
 
-        {#each filteredVolcanos as d, i}
+        {#each slicing as d, i}
                 <circle
 		    class="erupt"
                     cx={coord_proj_cx(d)}
