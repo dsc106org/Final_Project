@@ -15,6 +15,9 @@
 
     let outline = ({type: "Sphere"});
     let land, borders;
+    let selected = 1;
+    let mapper = selected;
+    let test = 0;
 
     export let volcanos;
     export let US_volcanos;
@@ -82,6 +85,8 @@
     	year: null, // Initialize with no year filter
     	location: null, // Initialize with no location filter
     };
+
+    let slicing = volcanos;
     let filteredVolcanos = volcanos;
     const yearCategories = ["pre-1800s", "1800s", "1900s", "2000s"];
 
@@ -102,6 +107,9 @@
 
     function filterByYearAndUpdateClass(category, button) {
     // If same button pressed twice, deactivate it and change category to null
+
+	selected = 1;
+    	test = 0;
     	if (selectedYear === category) {
       		selectedYear = null;
       		category = null;
@@ -137,11 +145,16 @@
       // console.log("Filtering by location:", filterState.location);
       // console.log("Number of matches:", filteredVolcanos.length);
 
+      slicing = filteredVolcanos;
       return yearMatches; //&& locationMatches;
     });
   }
 
     //console.log(volcanos);
+  $: mapper = selected;
+  $: if (test === 0) {
+    slicing = filteredVolcanos.slice(0, mapper);
+  } 
 </script>
 
 <link
@@ -164,6 +177,23 @@
   {/each}
 </div>
 
+<button
+  class="one"
+  on:click={() => (selected += 1)}
+  on:click={() => updateFilteredData()}
+  on:click={() => (test = 0)}
+>
+  Get Next Eruption
+</button>
+<button
+  class="all"
+  on:click={() => (test = 1)}
+  on:click={() => updateFilteredData()}
+  on:click={() => (selected = 0)}
+>
+  Get All Eruptions
+</button>
+
 <div class="globe"> 
 
     <svg
@@ -185,9 +215,10 @@
 
         {#each filteredVolcanos as d, i}
                 <circle
+		    class="erupt"
                     cx={coord_proj_cx(d)}
                     cy={coord_proj_cy(d)}
-                    r={4*(d.Volcano_explosive_index)}
+                    r={4*(d.Volcano_explosive_index)+4}
         	    fill={d.Volcano_explosive_index >= 5 ? 'red' : '#ffca20'}
                     opacity={0.6}
         	    stroke="gray"
@@ -199,6 +230,15 @@
                             hideTooltip(d)
                     }
                 />
+		{#if i + 1 === selected}
+        		<circle
+         		 class="erupt"
+          		 cx={coord_proj_cx(d)}
+          		 cy={coord_proj_cy(d)}
+          		 r={(4 * d.Volcano_explosive_index + 4) / 2}
+          		 fill="magenta"
+        		/>
+      		{/if}
         {/each}
 
     	<circle cx="-35" cy="500" r="20" fill="orange" opacity={0.6} />
@@ -229,4 +269,34 @@
         text-align:left;
         visibility: hidden;
     }
+
+  .all {
+    background-color: #8b0000;
+    border: white;
+    transition-duration: 0.4s;
+    color: white;
+    margin: 5px;
+    text-align: center;
+  }
+
+  .all:hover {
+    background-color: red;
+    border: #04aa6d;
+  }
+
+  .one {
+    background-color: orange;
+    border: white;
+    transition-duration: 0.4s;
+    color: white;
+  }
+
+  .one:hover {
+    background-color: red;
+    border: #04aa6d;
+  }
+
+  .erupt {
+    animation: fadeIn 0.5s;
+  }
 </style>
